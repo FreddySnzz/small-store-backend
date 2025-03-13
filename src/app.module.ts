@@ -7,6 +7,8 @@ import { ProductModule } from './product/product.module';
 import { typeOrmService } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
+import { StatusModule } from './status/status.module';
+import { OrderProductModule } from './order_product/order_product.module';
 
 @Module({
   imports: [
@@ -17,7 +19,10 @@ import { CategoryModule } from './category/category.module';
     OrderModule, 
     ProductModule, 
     UserModule, 
-    CategoryModule],
+    CategoryModule, 
+    StatusModule, 
+    OrderProductModule,
+  ],
   providers: [],
 })
 export class AppModule {}

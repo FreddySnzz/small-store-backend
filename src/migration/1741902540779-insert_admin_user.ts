@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class InsertAdminUser1741902540779 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.query(`
+        await queryRunner.query(`
             INSERT INTO public."user"(
                 name, email, password, phone, user_type, enabled)
                 VALUES (
@@ -18,7 +18,7 @@ export class InsertAdminUser1741902540779 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.query(`
+        await queryRunner.query(`
             DELETE FROM public."user"
                 WHERE email like 'admin@root.com';
         `)
