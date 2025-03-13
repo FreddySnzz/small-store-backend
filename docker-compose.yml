@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: small_store_backend
+    ports:
+      - "8089:8089"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://postgres:1234@small_store_db:5432/small-store
+
+  database:
+    image: postgres:15
+    container_name: small_store_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: small-store
+      POSTGRES_HOST: 127.0.0.1
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
