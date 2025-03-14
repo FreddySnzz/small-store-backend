@@ -31,6 +31,7 @@
 ```bash
 $ npm install
 ```
+__Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__
 
 ## Compile and run the project
 
