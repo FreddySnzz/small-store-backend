@@ -24,7 +24,13 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A small API for your store. <p>
+
+This project uses PostGreSQL with TypeORM as the database. <br>
+Authentication with JWT and Middlewares to block unauthorized users. <br>
+Unit tests with Jest, covering ~85% of the project. <p>
+
+The endpoints documentation was made with Postman.
 
 ## Project setup
 
