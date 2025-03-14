@@ -38,11 +38,72 @@ The endpoints documentation was made with Postman.
 $ npm install
 ```
 __Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__ <br>
+#### .Env file:
+```bash
+API_PORT=8089
 
+TYPEORM_HOST=localhost
+TYPEORM_PORT=5432
+TYPEORM_USERNAME=postgres
+TYPEORM_PASSWORD=1234
+TYPEORM_DATABASE=small-store
+TYPEORM_SCHEMA=small-store
+TYPEORM_DIALECT=postgres
+
+JWT_SECRET={editThisToYourJwtSecret}
+JWT_EXPIRES_IN={chooseYourTokenDuration - ex: 1d}
+```
+
+#### Dockerfile:
+```bash
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+RUN chown -R node /app
+CMD [ "npm", "run", "start:prod" ]
+EXPOSE 8089
+```
+
+#### docker-compose.yml file:
+```bash
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: small_store_backend
+    ports:
+      - "8089:8089"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://postgres:1234@small_store_db:5432/small-store
+
+  database:
+    image: postgres:15
+    container_name: small_store_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: small-store
+      POSTGRES_HOST: localhost
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+__Note²: You will need run the migrations to database.__ <br>
 ```bash
 $ npm run typeorm migration:run
 ```
-__Note²: You will need run the migrations to database.__ <br>
 
 ## Compile and run the project
 
