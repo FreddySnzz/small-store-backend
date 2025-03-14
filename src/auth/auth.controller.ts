@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { ReturnLoginDto } from './dtos/return-login.dto';
+import { ReturnRecoveryTokenDto } from './dtos/return-recovery-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +19,18 @@ export class AuthController {
 
   @UsePipes(ValidationPipe)
   @Post()
-  async login(@Body() loginDto: LoginDto): Promise<ReturnLoginDto> {
+  async login(
+    @Body() loginDto: LoginDto
+  ): Promise<ReturnLoginDto> {
     return this.authService.login(loginDto);
+  };
+
+  @Post('/get-recovery-token')
+  async getRecoveryToken(
+    @Body() userEmail: LoginDto
+  ): Promise<ReturnRecoveryTokenDto> {
+    return new ReturnRecoveryTokenDto(
+      await this.authService.getRecoveryToken(userEmail.email)
+    );
   };
 }

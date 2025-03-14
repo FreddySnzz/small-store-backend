@@ -24,6 +24,9 @@ export class UserEntity {
   @Column({ name: 'user_type', nullable: false })
   user_type: number;
 
+  @Column({ name: 'token', nullable: false })
+  token: string;
+
   @Column({ name: 'enabled', nullable: false })
   enabled: boolean;
 
