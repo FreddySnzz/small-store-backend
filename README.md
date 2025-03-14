@@ -31,7 +31,12 @@
 ```bash
 $ npm install
 ```
-__Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__
+__Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__ <br>
+
+```bash
+$ npm run typeorm migration:run
+```
+__Note²: You will need run the migrations to database.__ <br>
 
 ## Compile and run the project
 
