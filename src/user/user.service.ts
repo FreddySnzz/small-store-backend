@@ -13,6 +13,7 @@ import { createPasswordHashed, validatePassword } from '../utils/password';
 import { UserType } from './enum/user-type.enum';
 import { RecoveryPasswordDto } from './dtos/recovery-password.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -149,14 +150,35 @@ export class UserService {
     return user;
   };
 
+  async updateUser(
+    userId: number, 
+    updateUserDto: UpdateUserDto
+  ): Promise<UserEntity> {
+    const user = await this.findUserById(userId);
+
+    await this.userRepository.save({
+      ...user,
+      ...updateUserDto
+    });
+
+    return user;
+  };
+
   async disableUser(
     userId: number
   ): Promise<UserEntity> {
     const user = await this.findUserById(userId);
 
+    if (user.enabled === true) {
+      return await this.userRepository.save({
+        ...user,
+        enabled: false
+      });
+    }
+
     return await this.userRepository.save({
       ...user,
-      enabled: false
+      enabled: true
     });
   };
 }

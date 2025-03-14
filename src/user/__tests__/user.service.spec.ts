@@ -183,13 +183,13 @@ describe('UserService', () => {
     });
   });
 
-  describe('Disable user', () => {
+  describe('Enable/Disable user', () => {
     it('should return userEntity if user has been disabled', async () => {
       const user = await service.disableUser(
         userEntityMock.id
       );
   
-      expect(user).toEqual(userEntityMock);
+      expect(user.enabled).toEqual(true);
     });
 
     it('should return error in findUserById (error DB)', async () => {

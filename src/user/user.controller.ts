@@ -5,6 +5,7 @@ import {
   Param, 
   Patch, 
   Post, 
+  Put, 
   UsePipes, 
   ValidationPipe 
 } from '@nestjs/common';
@@ -16,9 +17,10 @@ import { UserType } from './enum/user-type.enum';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { RecoveryPasswordDto } from './dtos/recovery-password.dto';
 import { UserId } from '../decorators/user-id.decorator';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 
-@Roles(UserType.Admin, UserType.User)
+
 @Controller('user')
 export class UserController {
   constructor(
@@ -33,6 +35,7 @@ export class UserController {
     );
   };
 
+  @Roles(UserType.Admin, UserType.User)
   @Get('/:userId')
   async findUserById(
     @Param('userId') userId: number
@@ -60,6 +63,21 @@ export class UserController {
     return new ReturnUserDto(
       await this.userService.recoveryPassword(
         recoveryPassword
+      )
+    );
+  };
+
+  @Roles(UserType.Admin, UserType.User)
+  @UsePipes(ValidationPipe)
+  @Put('/update-user')
+  async updateUser(
+    @UserId() userId: number,
+    @Body() updateUserDto: UpdateUserDto
+  ): Promise<ReturnUserDto> {
+    return new ReturnUserDto(
+      await this.userService.updateUser(
+        userId, 
+        updateUserDto
       )
     );
   };
