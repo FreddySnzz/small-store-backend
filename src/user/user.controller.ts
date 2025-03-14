@@ -2,6 +2,7 @@ import {
   Body,
   Controller, 
   Get, 
+  Param, 
   Patch, 
   Post, 
   UsePipes, 
@@ -14,9 +15,10 @@ import { Roles } from '../decorators/roles.decorator';
 import { UserType } from './enum/user-type.enum';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { RecoveryPasswordDto } from './dtos/recovery-password.dto';
-import { UserId } from 'src/decorators/user-id.decorator';
+import { UserId } from '../decorators/user-id.decorator';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 
+@Roles(UserType.Admin, UserType.User)
 @Controller('user')
 export class UserController {
   constructor(
@@ -28,6 +30,15 @@ export class UserController {
   async findAll(): Promise<ReturnUserDto[]> {
     return (await this.userService.findAll()).map(
       (userEntity) => new ReturnUserDto(userEntity)
+    );
+  };
+
+  @Get('/:userId')
+  async findUserById(
+    @Param('userId') userId: number
+  ): Promise<ReturnUserDto> {
+    return new ReturnUserDto(
+      await this.userService.findUserById(userId)
     );
   };
 
@@ -54,7 +65,6 @@ export class UserController {
   };
 
   @UsePipes(ValidationPipe)
-  @Roles(UserType.Admin, UserType.User)
   @Patch('/update-password')
   async updatePassword(
     @UserId() userId: number,
@@ -65,6 +75,16 @@ export class UserController {
         userId, 
         updatePasswordDto
       )
+    );
+  };
+
+  @Roles(UserType.Admin)
+  @Get('/disable/:userId')
+  async disableUser(
+    @Param('userId') userId: number
+  ): Promise<ReturnUserDto> {
+    return new ReturnUserDto(
+      await this.userService.disableUser(userId)
     );
   };
 }

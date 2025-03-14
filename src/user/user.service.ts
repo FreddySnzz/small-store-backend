@@ -148,4 +148,15 @@ export class UserService {
 
     return user;
   };
+
+  async disableUser(
+    userId: number
+  ): Promise<UserEntity> {
+    const user = await this.findUserById(userId);
+
+    return await this.userRepository.save({
+      ...user,
+      enabled: false
+    });
+  };
 }
