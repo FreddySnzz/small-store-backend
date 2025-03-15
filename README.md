@@ -27,7 +27,7 @@
 A small API for your store. <br>
 Manage users, authentication, categories, products and orders, ensuring security and efficiency. <p>
 
-This project uses PostGreSQL with TypeORM as the database. <br>
+This project uses PostgreSQL with TypeORM as the database. <br>
 Authentication with JWT and Middlewares to block unauthorized users. <br>
 Unit tests with Jest, covering ~85% of the project. <p>
 
