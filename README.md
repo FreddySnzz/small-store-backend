@@ -170,9 +170,9 @@ Check out a few resources that may come in handy when working with NestJS:
 
 ## DB Schema
 <p align="center">
-  <!-- <a href="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/view?usp=drive_link" target="blank"><img src="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/preview" width="640" height="480" allow="autoplay" alt="schema" /></a> -->
-  <iframe src="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/preview" width="640" height="480" allow="autoplay"></iframe>
+  <img src="https://drive.google.com/uc?export=view&id=1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq" width="840" height="480" alt="schema" />
 </p>
+
 
 ## License
 
