@@ -4,7 +4,16 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(
+    AppModule, 
+    { 
+      logger: [
+        'log', 
+        'warn', 
+        'error', 
+      ] 
+    }
+  );
   const appPort = process.env.API_PORT || 3000;
 
   app.enableCors({
