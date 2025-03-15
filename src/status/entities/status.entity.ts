@@ -2,9 +2,12 @@ import {
   Column, 
   CreateDateColumn, 
   Entity, 
+  OneToMany, 
   PrimaryGeneratedColumn, 
   UpdateDateColumn 
 } from "typeorm";
+
+import { OrderEntity } from "../../order/entities/order.entity";
 
 @Entity({ name: 'status' })
 export class StatusEntity {
@@ -19,4 +22,7 @@ export class StatusEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => OrderEntity, (order: OrderEntity) => order.status)
+  orders?: OrderEntity;
 }

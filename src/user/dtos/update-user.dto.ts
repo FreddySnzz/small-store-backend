@@ -11,5 +11,5 @@ export class UpdateUserDto {
 
   @IsString()
   @IsOptional()
-  profile_image: string;
+  profileImage: string;
 }

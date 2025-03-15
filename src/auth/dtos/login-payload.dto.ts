@@ -6,6 +6,6 @@ export class LoginPayloadDto {
 
   constructor(user: UserEntity) {
     this.id = user.id;
-    this.userType = user.user_type;
+    this.userType = user.userType;
   }
 }

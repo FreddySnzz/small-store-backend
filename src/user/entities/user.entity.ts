@@ -1,8 +1,11 @@
 import { 
   Column, 
   Entity, 
+  OneToMany, 
   PrimaryGeneratedColumn 
 } from "typeorm";
+
+import { OrderEntity } from "../../order/entities/order.entity";
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -22,7 +25,7 @@ export class UserEntity {
   phone: string;
 
   @Column({ name: 'user_type', nullable: false })
-  user_type: number;
+  userType: number;
 
   @Column({ name: 'token', nullable: false })
   token: string;
@@ -31,11 +34,14 @@ export class UserEntity {
   enabled: boolean;
 
   @Column({ name: 'profile_image' })
-  profile_image: string;
+  profileImage: string;
 
   @Column({ name: 'created_at' })
-  created_at: Date;
+  createdAt: Date;
 
   @Column({ name: 'updated_at' })
-  updated_at: Date;
+  updatedAt: Date;
+
+  @OneToMany(() => OrderEntity, (order: OrderEntity) => order.user)
+  orders?: OrderEntity;
 }

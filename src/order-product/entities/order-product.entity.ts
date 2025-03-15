@@ -2,9 +2,14 @@ import {
   Column, 
   CreateDateColumn, 
   Entity, 
+  JoinColumn, 
+  ManyToOne, 
   PrimaryGeneratedColumn, 
   UpdateDateColumn 
 } from "typeorm";
+
+import { OrderEntity } from "../../order/entities/order.entity";
+import { ProductEntity } from "../../product/entities/product.entity";
 
 @Entity({ name: 'order_product' })
 export class OrderProductEntity {
@@ -12,10 +17,10 @@ export class OrderProductEntity {
   id: number;
   
   @Column({ name: 'order_id', nullable: false })
-  order_id: number;
+  orderId: number;
 
   @Column({ name: 'product_id', nullable: false })
-  product_id: number;
+  productId: number;
 
   @Column({ name: 'amount', nullable: false })
   amount: number;
@@ -28,4 +33,12 @@ export class OrderProductEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(() => OrderEntity, (order) => order.orderProducts)
+  @JoinColumn({ name: 'order_id', referencedColumnName: 'id' })
+  order?: OrderEntity;
+
+  @ManyToOne(() => ProductEntity, (product) => product.orderProducts)
+  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
+  product?: ProductEntity;
 }

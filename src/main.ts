@@ -38,12 +38,12 @@ async function bootstrap() {
   await app.listen(appPort, async () => {
     const logger = new Logger();
     logger.log(
-      `\n ############### ${process.env.PROJECT_NAME} ###############`,
+      `\n ############################## ${process.env.PROJECT_NAME} ##############################`,
     );
     logger.log(`Servidor iniciado em ${baseUrls[0].url}`);
     logger.log(`Port: ${appPort}`);
     logger.log(
-      `\n ############### ${process.env.PROJECT_NAME} ###############`,
+      `\n ############################## ${process.env.PROJECT_NAME} ##############################`,
     );
   });
 }

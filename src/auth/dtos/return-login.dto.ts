@@ -7,6 +7,6 @@ export class ReturnLoginDto {
 
   constructor (userEntity: UserEntity) {
     this.email = userEntity.email;
-    this.role = userEntity.user_type === 2 ? "User" : "Admin"
+    this.role = userEntity.userType === 2 ? "User" : "Admin"
   };
 }

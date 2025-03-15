@@ -10,7 +10,7 @@ import { typeOrmService } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { StatusModule } from './status/status.module';
-import { OrderProductModule } from './order_product/order_product.module';
+import { OrderProductModule } from './order-product/order-product.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './guards/roles.guard';
 

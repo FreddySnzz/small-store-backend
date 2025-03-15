@@ -27,10 +27,14 @@ export class UserService {
   };
 
   async findUserByEmail(
-    email: string
+    email: string,
+    enabledCondition?: boolean
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
-      where: { email }
+      where: { 
+        email,
+        enabled: enabledCondition
+      }
     });
 
     if (!user) {
@@ -77,7 +81,7 @@ export class UserService {
 
     if (user) {
       throw new NotAcceptableException(`Email already exists`);
-    };
+    }
 
     const passwordHashed = await createPasswordHashed(createUserDto.password);
 
@@ -169,16 +173,9 @@ export class UserService {
   ): Promise<UserEntity> {
     const user = await this.findUserById(userId);
 
-    if (user.enabled === true) {
-      return await this.userRepository.save({
-        ...user,
-        enabled: false
-      });
-    }
-
     return await this.userRepository.save({
       ...user,
-      enabled: true
+      enabled: !user.enabled
     });
   };
 }

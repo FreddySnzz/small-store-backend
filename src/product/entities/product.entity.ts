@@ -2,9 +2,15 @@ import {
   Column, 
   CreateDateColumn, 
   Entity, 
+  JoinColumn, 
+  ManyToOne, 
+  OneToMany, 
   PrimaryGeneratedColumn, 
   UpdateDateColumn 
 } from "typeorm";
+
+import { CategoryEntity } from "../../category/entities/category.entity";
+import { OrderProductEntity } from "src/order-product/entities/order-product.entity";
 
 @Entity({ name: 'product' })
 export class ProductEntity {
@@ -12,26 +18,39 @@ export class ProductEntity {
   id: number;
   
   @Column({ name: 'category_id', nullable: false })
-  category_id: number;
+  categoryId: number;
 
   @Column({ name: 'name', nullable: false })
   name: string;
 
-  @Column({ name: 'description', nullable: true })
+  @Column({ name: 'description' })
   description: string;
 
   @Column({ name: 'price', nullable: false })
   price: number;
 
   @Column({ name: 'stock_amount', nullable: false })
-  stock_amount: number;
+  stockAmount: number;
 
-  @Column({ name: 'image_url', nullable: true })
-  image_url: string;
+  @Column({ name: 'image_url' })
+  imageUrl: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.products,
+  )
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
+  category?: CategoryEntity;
+
+  @OneToMany(
+    () => OrderProductEntity, 
+    (orderProducts: OrderProductEntity) => orderProducts.product
+  )
+  orderProducts?: OrderProductEntity;
 }
