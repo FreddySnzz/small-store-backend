@@ -9,7 +9,7 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
   
   @IsNumber()
   price: number;
@@ -19,5 +19,5 @@ export class CreateProductDto {
   
   @IsString()
   @IsOptional()
-  imageUrl: string;
+  imageUrl?: string;
 }

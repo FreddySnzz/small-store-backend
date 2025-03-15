@@ -24,12 +24,15 @@
 
 ## Description
 
-A small API for your store. <p>
+A small API for your store. <br>
+Manage users, authentication, categories, products and orders, ensuring security and efficiency. <p>
 
 This project uses PostGreSQL with TypeORM as the database. <br>
 Authentication with JWT and Middlewares to block unauthorized users. <br>
-CORS enabled. <br>
 Unit tests with Jest, covering ~85% of the project. <p>
+CORS enabled. <p>
+
+Docker ready ✅ <br>
 
 The endpoints documentation was made with Postman.
 
@@ -41,6 +44,7 @@ $ npm install
 __Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__ <br>
 #### .Env file:
 ```bash
+PROJECT_NAME=small-store-backend
 API_PORT=8089
 
 TYPEORM_HOST=localhost
@@ -52,7 +56,10 @@ TYPEORM_SCHEMA=small-store
 TYPEORM_DIALECT=postgres
 
 JWT_SECRET={editThisToYourJwtSecret}
-JWT_EXPIRES_IN={chooseYourTokenDuration - ex: 1d}
+JWT_EXPIRES_IN={chooseYourAccessTokenDuration - ex: 1d}
+
+DATABASE_URL=postgres://postgres:1234@localhost:5432/small-store
+
 ```
 
 #### Dockerfile:
@@ -70,8 +77,6 @@ EXPOSE 8089
 
 #### docker-compose.yml file:
 ```bash
-version: '3.8'
-
 services:
   api:
     build: .
@@ -81,7 +86,7 @@ services:
     depends_on:
       - database
     environment:
-      - DATABASE_URL=postgres://postgres:1234@small_store_db:5432/small-store
+      - DATABASE_URL=postgres://postgres:1234@localhost:5432/small-store
 
   database:
     image: postgres:15
@@ -106,6 +111,7 @@ __Note²: You will need run the migrations to database.__ <br>
 $ npm run typeorm migration:run
 ```
 
+
 ## Compile and run the project
 
 ```bash
@@ -118,6 +124,14 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+
+#### Admin user credentials
+```bash
+email: "admin@root.com"
+password: "asdf1234"
+```
+
 
 ## Run tests
 
@@ -154,16 +168,6 @@ Check out a few resources that may come in handy when working with NestJS:
 - Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 

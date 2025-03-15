@@ -12,5 +12,5 @@ export class CreateOrderDto {
 
   @IsNumber()
   @IsOptional()
-  totalPrice: number;
+  totalPrice?: number;
 }
