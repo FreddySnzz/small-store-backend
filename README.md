@@ -30,11 +30,10 @@ Manage users, authentication, categories, products and orders, ensuring security
 This project uses PostGreSQL with TypeORM as the database. <br>
 Authentication with JWT and Middlewares to block unauthorized users. <br>
 Unit tests with Jest, covering ~85% of the project. <p>
-CORS enabled. <p>
 
-Docker ready ✅ <br>
+✅ CORS and Docker ready. <br>
 
-The endpoints documentation was made with Postman.
+<p align="center">📄 The project documentation was made with Postman. <a href="http://nodejs.org" target="_blank">Download here</a></p>
 
 ## Project setup
 
