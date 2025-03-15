@@ -33,7 +33,7 @@ Unit tests with Jest, covering ~85% of the project. <p>
 
 ✅ CORS and Docker ready. <br>
 
-<p align="center">📄 The project documentation was made with Postman. <a href="http://nodejs.org" target="_blank">Download here</a></p>
+<p align="center">📄 The project documentation was made with Postman <a href="https://drive.google.com/file/d/1x3VRfHDjPMncVmn66s8gdHYUfiZOG8wi/view?usp=drive_link" target="_blank">Download here</a> 📄</p>
 
 ## Project setup
 
@@ -167,6 +167,12 @@ Check out a few resources that may come in handy when working with NestJS:
 - Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+
+## DB Schema
+<p align="center">
+  <!-- <a href="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/view?usp=drive_link" target="blank"><img src="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/preview" width="640" height="480" allow="autoplay" alt="schema" /></a> -->
+  <iframe src="https://drive.google.com/file/d/1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq/preview" width="640" height="480" allow="autoplay"></iframe>
+</p>
 
 ## License
 
