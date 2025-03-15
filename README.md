@@ -28,7 +28,7 @@ A small API for your store. <br>
 Manage users, authentication, categories, products and orders, ensuring security and efficiency. <p>
 
 This project uses __PostgreSQL with TypeORM__ as the database. <br>
-Authentication with __JWT__ and Middlewares to block unauthorized users. <br>
+Authentication with __JWT__ and Middlewares to block unauthorized users and __LOG__ HTTP Requests. <br>
 Unit tests with __Jest__, covering ~85% of the project. <p>
 
 ✅ CORS and Docker ready. <br>
