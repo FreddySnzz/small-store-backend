@@ -27,13 +27,14 @@
 A small API for your store. <br>
 Manage users, authentication, categories, products and orders, ensuring security and efficiency. <p>
 
-This project uses PostGreSQL with TypeORM as the database. <br>
-Authentication with JWT and Middlewares to block unauthorized users. <br>
-Unit tests with Jest, covering ~85% of the project. <p>
+This project uses __PostgreSQL with TypeORM__ as the database. <br>
+Authentication with __JWT__ and Middlewares to block unauthorized users. <br>
+Unit tests with __Jest__, covering ~85% of the project. <p>
 
 ✅ CORS and Docker ready. <br>
 
-<p align="center">📄 The project documentation was made with Postman <a href="https://drive.google.com/file/d/1x3VRfHDjPMncVmn66s8gdHYUfiZOG8wi/view?usp=drive_link" target="_blank">Download here</a> 📄</p>
+<p align="center">📄 The project documentation was made with <a href="https://www.postman.com/" target="_blank">Postman</a> 📄</p>
+<p align="center"><a href="https://drive.google.com/file/d/1x3VRfHDjPMncVmn66s8gdHYUfiZOG8wi/view?usp=drive_link" target="_blank">Download here</a></p>
 
 ## Project setup
 
