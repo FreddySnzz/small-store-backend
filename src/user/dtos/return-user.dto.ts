@@ -5,13 +5,19 @@ export class ReturnUserDto {
   name: string;
   email: string;
   phone: string;
-  user_type: number;
+  userType: number;
+  enabled: boolean;
+  profileImage?: string;
 
   constructor(userEntity: UserEntity) {
     this.id = userEntity.id;
     this.name = userEntity.name;
     this.email = userEntity.email;
     this.phone = userEntity.phone;
-    this.user_type = userEntity.user_type;
+    this.userType = userEntity.userType;
+    this.enabled = userEntity.enabled;
+    this.profileImage = userEntity?.profileImage 
+      ? userEntity.profileImage 
+      : undefined;
   };
 }

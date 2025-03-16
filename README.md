@@ -24,13 +24,93 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A small API for your store. <br>
+Manage users, authentication, categories, products and orders, ensuring security and efficiency. <p>
+
+This project uses __PostgreSQL with TypeORM__ as the database. <br>
+Authentication with __JWT__ and Middlewares to block unauthorized users and __LOG__ HTTP Requests. <br>
+Unit tests with __Jest__, covering +85% of the project. <p>
+
+✅ CORS and Docker config ready. <br>
+
+<p align="center">📄 The project documentation was made with <a href="https://www.postman.com/" target="_blank">Postman</a> 📄</p>
+<p align="center"><a href="https://drive.google.com/file/d/1mHQG0y6wNt3HI-Lt0xnPd4i6rB7oVXbl/view?usp=drive_link" target="_blank">Download here</a></p>
 
 ## Project setup
 
 ```bash
 $ npm install
 ```
+__Note: You will need .env, Dockerfile and docker-compose.yml to start the project on localhost.__ <br>
+#### .Env file:
+```bash
+PROJECT_NAME=small-store-backend
+API_PORT=8089
+
+TYPEORM_HOST=localhost
+TYPEORM_PORT=5432
+TYPEORM_USERNAME=postgres
+TYPEORM_PASSWORD=1234
+TYPEORM_DATABASE=small-store
+TYPEORM_SCHEMA=small-store
+TYPEORM_DIALECT=postgres
+
+JWT_SECRET={editThisToYourJwtSecret}
+JWT_EXPIRES_IN={chooseYourAccessTokenDuration - ex: 1d}
+
+DATABASE_URL=postgres://postgres:1234@localhost:5432/small-store
+
+```
+
+#### Dockerfile:
+```bash
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+RUN chown -R node /app
+CMD [ "npm", "run", "start:prod" ]
+EXPOSE 8089
+```
+
+#### docker-compose.yml file:
+```bash
+services:
+  api:
+    build: .
+    container_name: small_store_backend
+    ports:
+      - "8089:8089"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://postgres:1234@localhost:5432/small-store
+
+  database:
+    image: postgres:15
+    container_name: small_store_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: small-store
+      POSTGRES_HOST: localhost
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+__Note²: You will need run the migrations to database.__ <br>
+```bash
+$ npm run typeorm migration:run
+```
+
 
 ## Compile and run the project
 
@@ -45,14 +125,19 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+
+#### Admin user credentials
+```bash
+email: "admin@root.com"
+password: "asdf1234"
+```
+
+
 ## Run tests
 
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
@@ -84,15 +169,11 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
+## DB Schema
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1WJwsKXie1hJVvWIbZ8owBxAJTLUriJmq" width="840" height="480" alt="schema" />
+</p>
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
