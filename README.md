@@ -31,7 +31,7 @@ This project uses __PostgreSQL with TypeORM__ as the database. <br>
 Authentication with __JWT__ and Middlewares to block unauthorized users and __LOG__ HTTP Requests. <br>
 Unit tests with __Jest__, covering +85% of the project. <p>
 
-✅ CORS and Docker ready. <br>
+✅ CORS and Docker config ready. <br>
 
 <p align="center">📄 The project documentation was made with <a href="https://www.postman.com/" target="_blank">Postman</a> 📄</p>
 <p align="center"><a href="https://drive.google.com/file/d/1mHQG0y6wNt3HI-Lt0xnPd4i6rB7oVXbl/view?usp=drive_link" target="_blank">Download here</a></p>
