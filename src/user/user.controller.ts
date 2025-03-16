@@ -97,12 +97,12 @@ export class UserController {
   };
 
   @Roles(UserType.Admin)
-  @Get('/disable/:userId')
-  async disableUser(
+  @Get('/toggle-enable/:userId')
+  async toggleEnableUser(
     @Param('userId') userId: number
   ): Promise<ReturnUserDto> {
     return new ReturnUserDto(
-      await this.userService.disableUser(userId)
+      await this.userService.toggleEnableUser(userId)
     );
   };
 }

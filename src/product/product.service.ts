@@ -19,6 +19,8 @@ import { CategoryService } from '../category/category.service';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { AddProductDto } from './dtos/add-product.dto';
+import { CountProductDto } from './dtos/count-product.dto';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class ProductService {
@@ -27,7 +29,10 @@ export class ProductService {
     private readonly productRepository: Repository<ProductEntity>,
 
     @Inject(forwardRef(() => CategoryService))
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+
+    @Inject(forwardRef(() => CacheService))
+    private readonly cacheService: CacheService
   ) {}
 
   async findAll(
@@ -54,7 +59,9 @@ export class ProductService {
       };
     }
 
-    const products = await this.productRepository.find(findOptions);
+    const products = await this.cacheService.getCache<ProductEntity[]>(`product_all`, 
+      () => this.productRepository.find(findOptions)
+    );
 
     if (!products || products.length === 0) {
       throw new NotFoundException(`Products not found`);
@@ -145,7 +152,7 @@ export class ProductService {
     });
   };
 
-  async countProductsByCategoryId(): Promise<any> {
+  async countProductsByCategory(): Promise<CountProductDto[]> {
     return this.productRepository
       .createQueryBuilder('product')
       .select('product.category_id', 'category_id')

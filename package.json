@@ -22,6 +22,7 @@
     "typeorm:migrate": "npm run typeorm migration:run"
   },
   "dependencies": {
+    "@nestjs/cache-manager": "^3.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^10.0.0",
@@ -29,6 +30,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^11.0.0",
     "bcrypt": "^5.1.1",
+    "cache-manager": "^6.4.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "pg": "^8.14.0",
@@ -74,6 +76,8 @@
       "**/*.(t|j)s",
       "!**/main.ts",
       "!**/*.module.(t|j)s",
+      "!**/*.middleware.(t|j)s",
+      "!**/*.config.(t|j)s",
       "!**/*.dto.(t|j)s",
       "!**/*.entity.(t|j)s",
       "!**/*.decorator.(t|j)s",

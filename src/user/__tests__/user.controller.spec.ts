@@ -24,7 +24,7 @@ describe('UserController', () => {
             updatePassword: jest.fn().mockResolvedValue(userEntityMock),
             recoveryPassword: jest.fn().mockResolvedValue(userEntityMock),
             updateUser: jest.fn().mockResolvedValue(userEntityMock),
-            disableUser: jest.fn().mockResolvedValue(userEntityMock),
+            toggleEnableUser: jest.fn().mockResolvedValue(userEntityMock),
           },
         },
       ],
@@ -48,9 +48,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     }]);
   });
 
@@ -62,9 +62,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 
@@ -76,9 +76,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 
@@ -90,9 +90,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 
@@ -107,9 +107,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 
@@ -124,14 +124,14 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 
   it('Enable/Disable User By ID', async () => {
-    const user = await controller.disableUser(
+    const user = await controller.toggleEnableUser(
       userEntityMock.id,
     );
 
@@ -140,9 +140,9 @@ describe('UserController', () => {
       email: userEntityMock.email,
       name: userEntityMock.name,
       phone: userEntityMock.phone,
-      profile_image: userEntityMock.profile_image,
+      profileImage: userEntityMock.profileImage,
       enabled: userEntityMock.enabled,
-      user_type: userEntityMock.user_type,
+      userType: userEntityMock.userType,
     });
   });
 });

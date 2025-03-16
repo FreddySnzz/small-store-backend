@@ -14,6 +14,7 @@ import { OrderProductModule } from './order-product/order-product.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './guards/roles.guard';
 import { LoggerMiddleware } from './middlewares/request-logger.middleware';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { LoggerMiddleware } from './middlewares/request-logger.middleware';
     StatusModule, 
     OrderProductModule, 
     AuthModule,
-    JwtModule
+    JwtModule,
+    CacheModule
   ],
   providers: [{
     provide: APP_GUARD,

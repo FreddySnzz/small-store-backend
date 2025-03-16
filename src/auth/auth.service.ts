@@ -34,7 +34,7 @@ export class AuthService {
     };
   };
 
-  async getRecoveryToken(email: string): Promise<any> {
+  async getRecoveryToken(email: string): Promise<string> {
     const user: UserEntity | undefined = await this.userService
       .findUserByEmail(email)
       .catch(() => undefined);

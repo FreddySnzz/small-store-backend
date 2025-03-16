@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 
 import { CategoryEntity } from "../../category/entities/category.entity";
-import { OrderProductEntity } from "src/order-product/entities/order-product.entity";
+import { OrderProductEntity } from "../../order-product/entities/order-product.entity";
 
 @Entity({ name: 'product' })
 export class ProductEntity {

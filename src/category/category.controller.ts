@@ -58,12 +58,12 @@ export class CategoryController {
   };
 
   @Roles(UserType.Admin)
-  @Get('/disable/:categoryId')
-  async disableCategory(
+  @Get('/toggle-enable/:categoryId')
+  async toggleCategoryEnableById(
     @Param('categoryId') categoryId: number
   ): Promise<ReturnCategoryDto> {
     return new ReturnCategoryDto(
-      await this.categoryService.disableCategoryById(categoryId)
+      await this.categoryService.toggleCategoryEnableById(categoryId)
     );
   };
 }

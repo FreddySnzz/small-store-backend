@@ -15,6 +15,7 @@ import { OrderProductService } from '../order-product/order-product.service';
 import { AddProductDto } from '../product/dtos/add-product.dto';
 import { StatusType } from '../status/enum/status-type.enum';
 import { UpdateProductDto } from '../product/dtos/update-product.dto';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class OrderService {
@@ -26,6 +27,9 @@ export class OrderService {
 
   @Inject(forwardRef(() => OrderProductService))
   private readonly orderProductService: OrderProductService;
+
+  @Inject(forwardRef(() => CacheService))
+  private readonly cacheService: CacheService;
 
   async getAllOrders(
     userId?: number,
@@ -58,10 +62,12 @@ export class OrderService {
         }
       };
     };
-    
-    const orders = await this.orderRepository.find(findOptions);
 
-    if (orders.length === 0 || !orders) {
+    const orders = await this.cacheService.getCache<OrderEntity[]>(`orders_all`, 
+      () => this.orderRepository.find(findOptions)
+    );
+
+    if (!orders || orders.length === 0) {
       throw new NotFoundException('No orders found');
     };
 
@@ -99,16 +105,17 @@ export class OrderService {
         order.id,
         findProduct.price,
         products.amount,
-      ).catch((error) => console.log(error));
+      ).catch((error) => {
+        throw new BadRequestException(error)
+      });
     };
 
     const orderProducts = await this.orderProductService
       .findOrderProductByOrderId(order.id);
 
-    let finalTotalPrice = 0;
-    for(const orderProduct of orderProducts) {
-      finalTotalPrice += orderProduct.price;
-    };
+      const finalTotalPrice = orderProducts.reduce(
+        (total, orderProduct) => total + orderProduct.price, 0
+      );
 
     return await this.orderRepository.save({
       ...order,
@@ -187,7 +194,6 @@ export class OrderService {
   async cancelOrder(
     orderId: number,
   ): Promise<OrderEntity> {
-    console.log("OOOOOOOOOI")
     return this.updateOrderStatus(orderId, StatusType.Canceled);
   };
 }

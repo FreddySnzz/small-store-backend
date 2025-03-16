@@ -17,9 +17,19 @@ import {
 } from "../__mocks__/update-password.mock";
 import { recoveryTokenMock } from "../../auth/__mocks__/recovery-token.mock";
 import { loginUserMock } from "../../auth/__mocks__/login-user.mock";
+import { CacheService } from "../../cache/cache.service";
+import { recoveryPasswordMock } from "../__mocks__/recovery-password.mock";
+import { updateUserMock } from "../__mocks__/update-user.mock";
+import * as passwordUtils from '../../utils/password';
+
+jest.mock('../../utils/password.ts', () => ({
+  validatePassword: jest.fn(),
+  createPasswordHashed: jest.fn(),
+}));
 
 describe('UserService', () => {
   let service: UserService;
+  let cacheService: CacheService;
   let userRepository: Repository<UserEntity>;
 
   beforeEach(async () => {
@@ -33,11 +43,18 @@ describe('UserService', () => {
             findOne: jest.fn().mockResolvedValue(userEntityMock),
             save: jest.fn().mockResolvedValue(userEntityMock),
           }
-        }
+        },
+        {
+          provide: CacheService,
+          useValue: {
+            getCache: jest.fn().mockResolvedValue([userEntityMock]),
+          }
+        },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
+    cacheService = module.get<CacheService>(CacheService);
     userRepository = module.get<Repository<UserEntity>>(
       getRepositoryToken(UserEntity)
     );
@@ -45,6 +62,7 @@ describe('UserService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(cacheService).toBeDefined();
     expect(userRepository).toBeDefined();
   });
 
@@ -126,11 +144,30 @@ describe('UserService', () => {
   
       expect(users).toEqual([userEntityMock]);
     });
-  
-    it('should return error in exception', async () => {
-      jest.spyOn(userRepository, 'find').mockRejectedValueOnce(new Error());
+
+    it('should return cached users if available', async () => {
+      const cachedUsers: UserEntity[] = [userEntityMock];
       
-      expect(service.findAll()).rejects.toThrow();
+      jest.spyOn(cacheService, 'getCache').mockResolvedValue(cachedUsers);
+  
+      const result = await service.findAll();
+      
+      expect(result).toEqual(cachedUsers);
+      expect(cacheService.getCache).toHaveBeenCalledWith('users_all', expect.any(Function));
+      expect(userRepository.find).not.toHaveBeenCalled();
+    });
+  
+    it('should fetch users from the database if not in cache', async () => {
+      const dbUsers: UserEntity[] = [userEntityMock];
+      
+      jest.spyOn(cacheService, 'getCache').mockImplementation((key, callback) => callback());
+      jest.spyOn(userRepository, 'find').mockResolvedValue(dbUsers);
+  
+      const result = await service.findAll();
+
+      expect(result).toEqual(dbUsers);
+      expect(cacheService.getCache).toHaveBeenCalledWith('users_all', expect.any(Function));
+      expect(userRepository.find).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -150,13 +187,43 @@ describe('UserService', () => {
 
   describe('Update user password', () => {
     it('should return password updated', async () => {
+      (passwordUtils.validatePassword as jest.Mock).mockResolvedValue(true);
+      (passwordUtils.createPasswordHashed as jest.Mock).mockResolvedValue(updatePasswordMock.newPassword);
+
       const user = await service.updatePassword(userEntityMock.id, updatePasswordMock);
   
       expect(user).toEqual(userEntityMock);
+      expect(passwordUtils.validatePassword).toHaveBeenCalledWith(
+        updatePasswordMock.oldPassword, 
+        userEntityMock.password
+      );
+      expect(passwordUtils.createPasswordHashed).toHaveBeenCalledWith(recoveryPasswordMock.newPassword);
+      expect(userRepository.save).toHaveBeenCalledWith({
+        ...userEntityMock,
+        password: recoveryPasswordMock.newPassword
+      });
     });
 
-    it('should return error in invalid password', async () => {
-      expect(service.updatePassword(userEntityMock.id, updateInvalidPasswordMock)).rejects.toThrow();
+    it('should throw an error if the new password is the same as the old one', async () => {
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(userEntityMock);
+  
+      await expect(service.updatePassword(
+        userEntityMock.id, 
+        {
+          oldPassword: userEntityMock.password,
+          newPassword: userEntityMock.password
+        }
+      )).rejects.toThrow(new BadRequestException('Passwords cannot be the same'));
+    });
+
+    it('should throw an error if the old password does not match', async () => {
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(userEntityMock);
+      (passwordUtils.validatePassword as jest.Mock).mockResolvedValue(false);
+  
+      await expect(service.updatePassword(
+        userEntityMock.id, 
+        updatePasswordMock
+      )).rejects.toThrow(new BadRequestException('Passwords do not match'));
     });
 
     it('should return error if user not found', async () => {
@@ -185,7 +252,7 @@ describe('UserService', () => {
 
   describe('Enable/Disable user', () => {
     it('should return userEntity if user has been disabled', async () => {
-      const user = await service.disableUser(
+      const user = await service.toggleEnableUser(
         userEntityMock.id
       );
   
@@ -196,6 +263,55 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'findOne').mockRejectedValueOnce(new Error());
   
       expect(service.findUserById(userEntityMock.id)).rejects.toThrow();
+    });
+  });
+
+  describe('Recovery password', () => {
+    it('should update the password and reset the token', async () => {
+      const updatedUser = {
+        ...userEntityMock,
+        password: 'newPasswordHashed',
+        token: '0',
+      };
+
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(userEntityMock);
+      (passwordUtils.validatePassword as jest.Mock).mockResolvedValue(false);
+      (passwordUtils.createPasswordHashed as jest.Mock).mockResolvedValue(updatePasswordMock.newPassword);
+      jest.spyOn(userRepository, 'save').mockResolvedValue(updatedUser as UserEntity);
+  
+      const result = await service.recoveryPassword(recoveryPasswordMock);
+
+      expect(result).toEqual(updatedUser);
+      expect(userRepository.findOne).toHaveBeenCalledWith({ 
+        where: { token: userEntityMock.token } 
+      });
+      expect(passwordUtils.validatePassword).toHaveBeenCalledWith(
+        recoveryPasswordMock.newPassword, 
+        userEntityMock.password
+      );
+      expect(passwordUtils.createPasswordHashed).toHaveBeenCalledWith(recoveryPasswordMock.newPassword);
+      expect(userRepository.save).toHaveBeenCalledWith({
+        ...userEntityMock,
+        password: recoveryPasswordMock.newPassword,
+        token: '0',
+      });
+    });
+
+    it('should throw an error if the new password is the same as the old one', async () => {
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(userEntityMock);
+      (passwordUtils.validatePassword as jest.Mock).mockResolvedValue(true);
+  
+      await expect(service.recoveryPassword(recoveryPasswordMock)).rejects.toThrow(
+        new BadRequestException('New password must be different from the old one'),
+      );
+    });
+  });
+
+  describe('Update user', () => {
+    it('should return userEntity after update user', async () => {
+      const user = await service.updateUser(userEntityMock.id, updateUserMock);
+  
+      expect(user).toEqual(userEntityMock);
     });
   });
 });

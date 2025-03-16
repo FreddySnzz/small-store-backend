@@ -35,9 +35,6 @@ export class LoggerMiddleware implements NestMiddleware {
       } else {
         this.logger.log(`[${method}] ${originalUrl} - ${statusCode} - ${responseTime}ms - IP: ${ip}`);
       };
-
-      this.logger.debug(`Headers: ${JSON.stringify(headers)}`);
-      this.logger.verbose(`Query Params: ${JSON.stringify(query)}`);
     });
 
     next();

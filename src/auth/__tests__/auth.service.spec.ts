@@ -57,7 +57,7 @@ describe('AuthService', () => {
       expect(user).toEqual({
         accessToken: jwtMock,
         email: userEntityMock.email,
-        role: userEntityMock.user_type === 2 ? "User" : "Admin"
+        role: userEntityMock.userType === 2 ? "User" : "Admin"
       });
     });
   
@@ -67,16 +67,27 @@ describe('AuthService', () => {
       expect(service.login(loginUserMock)).rejects.toThrow();
     });
   
-    it('should return user if email not exist', async () => {
+    it('should NotFoundException if email not exist', async () => {
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(undefined);
   
-      expect(service.login(loginUserMock)).rejects.toThrow(new NotFoundException('Email or password invalid'));
+      await expect(
+        service.login(loginUserMock)
+      ).rejects.toThrow(NotFoundException);
     });
   
-    it('should return user if email are valid and password are invalid', async () => {
-      expect(
-        service.login({ ...loginUserMock, password: 'asdf'})
-      ).rejects.toThrow();
+    it('should throw NotFoundException if email is valid but password is incorrect', async () => {
+      jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(userEntityMock);
+    
+      await expect(
+        service.login({ ...loginUserMock, password: 'wrongpassword' })
+      ).rejects.toThrow(NotFoundException);
+    });
+    
+
+    it('should handle error from findUserByEmail gracefully', async () => {
+      jest.spyOn(userService, 'findUserByEmail').mockRejectedValueOnce(new Error('Database error'));
+    
+      await expect(service.login(loginUserMock)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -97,15 +108,16 @@ describe('AuthService', () => {
     });
   
     it('should return error in UserService', async () => {
-      jest.spyOn(userService, 'findUserByEmail').mockRejectedValueOnce(undefined);
+      jest.spyOn(userService, 'findUserByEmail').mockRejectedValueOnce(new Error('Database error'));
   
-      expect(service.login(loginUserMock)).rejects.toThrow();
+      expect(service.getRecoveryToken(loginUserMock.email)).rejects.toThrow(NotFoundException);
     });
   
-    it('should return NotFoundException if email not exist', async () => {
+    it('should throw NotFoundException if user does not exist', async () => {
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(undefined);
-  
-      expect(service.login(loginUserMock)).rejects.toThrow(new NotFoundException('Email or password invalid'));
+    
+      await expect(service.getRecoveryToken('invalid@email.com')).rejects.toThrow(NotFoundException);
     });
+      
   });
 });

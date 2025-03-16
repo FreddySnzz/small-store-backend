@@ -14,16 +14,20 @@ import { UserType } from './enum/user-type.enum';
 import { RecoveryPasswordDto } from './dtos/recovery-password.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly cacheService: CacheService
   ) {}
 
   async findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
+    return await this.cacheService.getCache<UserEntity[]>(`users_all`, 
+      () => this.userRepository.find()
+    );
   };
 
   async findUserByEmail(
@@ -168,7 +172,7 @@ export class UserService {
     return user;
   };
 
-  async disableUser(
+  async toggleEnableUser(
     userId: number
   ): Promise<UserEntity> {
     const user = await this.findUserById(userId);

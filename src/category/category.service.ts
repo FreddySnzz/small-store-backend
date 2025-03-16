@@ -47,7 +47,7 @@ export class CategoryService {
       throw new NotFoundException(`Categories empty`);
     };
 
-    const count = await this.productService.countProductsByCategoryId();
+    const count = await this.productService.countProductsByCategory();
 
     return categories.map(
       (category) => new ReturnCategoryDto(
@@ -111,7 +111,7 @@ export class CategoryService {
     return category;
   };
 
-  async disableCategoryById(
+  async toggleCategoryEnableById(
     categoryId: number
   ): Promise<CategoryEntity> {
     const user = await this.findCategoryById(categoryId, undefined);
