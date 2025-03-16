@@ -34,7 +34,7 @@ Unit tests with __Jest__, covering ~85% of the project. <p>
 ✅ CORS and Docker ready. <br>
 
 <p align="center">📄 The project documentation was made with <a href="https://www.postman.com/" target="_blank">Postman</a> 📄</p>
-<p align="center"><a href="https://drive.google.com/file/d/1x3VRfHDjPMncVmn66s8gdHYUfiZOG8wi/view?usp=drive_link" target="_blank">Download here</a></p>
+<p align="center"><a href="https://drive.google.com/file/d/1mHQG0y6wNt3HI-Lt0xnPd4i6rB7oVXbl/view?usp=drive_link" target="_blank">Download here</a></p>
 
 ## Project setup
 
